@@ -1,0 +1,45 @@
+# Kotlin specific
+/.idea/
+/*.iml
+/build/
+/out/
+/*.class
+/*.jar
+/*.war
+/*.zip
+/*.tgz
+/.gradle/
+/gradle-wrapper.jar
+/gradle-wrapper.properties
+.gradle/
+/local.properties
+
+# OS-specific files
+.DS_Store
+*.swp
+*.swo
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+.idea/workspace.xml
+.idea/misc.xml
+.idea/modules.xml
+
+# Mac specific
+.AppleDouble
+.LSOverride
+
+# Other IDEs
+.vscode/
+*.code-workspace
+
+# Logs
+*.log
+
+# Environment variables
+.env
+

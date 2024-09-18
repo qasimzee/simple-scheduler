@@ -8,6 +8,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    kotlin("jvm") version "1.9.22"
 }
 
 repositories {
@@ -23,18 +24,27 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+    implementation("io.ktor:ktor-server-core:2.3.12")
+    implementation("io.ktor:ktor-server-netty:2.3.12")
+    implementation("io.ktor:ktor-server-content-negotiation:2.3.12")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.12")
+    implementation("org.postgresql:postgresql:42.6.0")
+    implementation("org.quartz-scheduler:quartz:2.3.2")
 }
 
-// Apply a specific Java toolchain to ease working on different environments.
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+kotlin {
+    jvmToolchain(21)
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "21"
     }
 }
 
 application {
-    // Define the main class for the application.
-    mainClass = "org.example.App"
+    mainClass.set("com.example.ApplicationKt")
+    // mainClassName = "com.example.ApplicationKt"
 }
 
 tasks.named<Test>("test") {

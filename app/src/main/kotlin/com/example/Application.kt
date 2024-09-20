@@ -13,13 +13,25 @@ import io.ktor.server.netty.*
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.request.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.serialization.jackson.*
+import io.ktor.server.plugins.callloging.*
 
-fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
+fun main() {
+    embeddedServer(Netty, port = 8080, module = Application::module).start(wait = true)
+}
 
 fun Application.module() {
-    val projectId = "your-project-id"
-    val instanceId = "your-instance-id"
-    val databaseName = "your-database-name"
+    install(CallLogging)
+
+    install(ContentNegotiation) {
+        jackson()
+    }
+
+    val projectId = "numeric-pilot-432704-n6"
+    val instanceId = "task-management"
+    val databaseName = "task-scheduler"
 
     val spannerOptions = SpannerOptions.newBuilder()
         .setProjectId(projectId)
@@ -32,10 +44,8 @@ fun Application.module() {
 
     val taskService = TaskService(databaseClient)
 
-    embeddedServer(Netty, 8080) {
-        routing {
-            tasks(taskService)
-        }
-    }.start(wait = true)
+    routing {
+        tasks(taskService)
+    }
 
 }

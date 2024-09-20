@@ -27,7 +27,7 @@ fun Route.tasks(taskService: TaskService) {
     }
 
     get("/tasks") {
-        val tasks = taskService.getAllTasks()
+        val tasks = taskService.getTasks()
         call.respond(tasks)
     }
 

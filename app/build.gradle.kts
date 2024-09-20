@@ -57,6 +57,12 @@ application {
     mainClass.set("com.example.ApplicationKt")
 }
 
+tasks.create("runScheduler", JavaExec::class) {
+    group = "application"
+    mainClass.set("com.example.scheduler.TaskSchedulerKt")
+    classpath = sourceSets["main"].runtimeClasspath
+}
+
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()

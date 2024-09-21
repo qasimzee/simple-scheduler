@@ -121,9 +121,9 @@ class TaskScheduler (private val taskService: TaskService) {
 }
 
 fun main() {
-    val projectId = "numeric-pilot-432704-n6"
-    val instanceId = "task-management"
-    val databaseName = "task-scheduler"
+    val projectId = System.getenv("SPANNER_PROJECT")?: "numeric-pilot-432704-n6"
+    val instanceId = System.getenv("SPANNER_INSTANCE")?: "task-management"
+    val databaseName = System.getenv("SPANNER_DATABASE")?: "task-scheduler"
     val spannerOptions = SpannerOptions.newBuilder()
         .setProjectId(projectId)
         .setCredentials(GoogleCredentials.getApplicationDefault())

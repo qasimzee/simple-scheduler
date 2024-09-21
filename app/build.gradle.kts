@@ -73,6 +73,19 @@ sourceSets {
     }
 }
 
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "com.example.ApplicationKt"
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    // This line is to include all the dependencies in the JAR
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+}
+
+tasks.withType<Jar> {
+    exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
+}
+
 tasks.register<JavaExec>("runLoadTest") {
     description = "Runs the load test"
     group = "verification"

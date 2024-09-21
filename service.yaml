@@ -1,0 +1,32 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: task-scheduler
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: "100"
+        run.googleapis.com/cloudsql-instances: "numeric-pilot-432704-n6:us-central1:task-scheduler"
+    spec:
+      serviceAccountName: task-scheduler-dev@numeric-pilot-432704-n6.iam.gserviceaccount.com    
+      containers:
+      - image: gcr.io/numeric-pilot-432704-n6/task-scheduler:v1
+        env:
+        - name: SPANNER_PROJECT
+          value: "numeric-pilot-432704-n6"
+        - name: SPANNER_INSTANCE
+          value: "task-management"
+        - name: SPANNER_DATABASE
+          value: "task-scheduler"
+        resources:
+          limits:
+            cpu: "1"
+            memory: 512Mi
+        startupProbe:
+          httpGet:
+            path: "/health"
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 30

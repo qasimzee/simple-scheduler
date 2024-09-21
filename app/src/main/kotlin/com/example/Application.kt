@@ -14,9 +14,17 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.plugins.callloging.*
+import io.ktor.http.*
+
+
+
 
 fun main() {
-    embeddedServer(Netty, port = 8080, module = Application::module).start(wait = true)
+    println("Environment variables:")
+    System.getenv().forEach { (key, value) -> println("$key: $value") }
+    
+    val port = System.getenv("PORT")?.toIntOrNull() ?: 8080
+    embeddedServer(Netty, port = port, module = Application::module).start(wait = true)
 }
 
 fun Application.module() {
@@ -26,9 +34,9 @@ fun Application.module() {
         jackson()
     }
 
-    val projectId = "numeric-pilot-432704-n6"
-    val instanceId = "task-management"
-    val databaseName = "task-scheduler"
+    val projectId = System.getenv("SPANNER_PROJECT")?: "numeric-pilot-432704-n6"
+    val instanceId = System.getenv("SPANNER_INSTANCE")?: "task-management"
+    val databaseName = System.getenv("SPANNER_DATABASE")?: "task-scheduler"
 
     val spannerOptions = SpannerOptions.newBuilder()
         .setProjectId(projectId)
@@ -42,6 +50,9 @@ fun Application.module() {
     val taskService = TaskService(databaseClient)
 
     routing {
+        get("/health") {
+            call.respondText("OK", status = HttpStatusCode.OK)
+        }
         tasks(taskService)
     }
 

@@ -63,6 +63,24 @@ tasks.create("runScheduler", JavaExec::class) {
     classpath = sourceSets["main"].runtimeClasspath
 }
 
+sourceSets {
+    create("loadtest") {
+        kotlin {
+            srcDir("loadtest")
+        }
+        compileClasspath += sourceSets.main.get().output + configurations.testRuntimeClasspath.get()
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+tasks.register<JavaExec>("runLoadTest") {
+    description = "Runs the load test"
+    group = "verification"
+    mainClass.set("com.example.loadtest.LoadTestMainKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    workingDir = project.projectDir
+}
+
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()

@@ -138,6 +138,8 @@ class TaskService(private val dbClient: DatabaseClient) {
             tasks
         }
     }
+
+    // This function creates a new job run for a task. Can be stripped out into a JobService
     suspend fun createJobRun(taskId: String): JobRun {
         return withContext(Dispatchers.IO) {
             val jobRun = JobRun(task_id = taskId, status = JobStatus.RUNNING)
@@ -153,6 +155,7 @@ class TaskService(private val dbClient: DatabaseClient) {
             jobRun
         }
     }
+    // This function creates a new job run for a task. Can be stripped out into a JobService
     suspend fun updateJobRun(jobRun: JobRun) {
         withContext(Dispatchers.IO) {
             dbClient.readWriteTransaction().run { transaction ->

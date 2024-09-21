@@ -5,14 +5,16 @@ import com.example.service.TaskService
 
 import org.quartz.impl.StdSchedulerFactory
 import org.quartz.*
+import com.google.cloud.Timestamp
+import com.google.cloud.spanner.*
+import com.google.auth.oauth2.GoogleCredentials
+import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import com.google.cloud.Timestamp
-import com.google.cloud.spanner.SpannerOptions
-import com.google.cloud.spanner.DatabaseId
-import com.google.auth.oauth2.GoogleCredentials
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 
 
 class TaskJob: Job {
@@ -56,9 +58,6 @@ class TaskJob: Job {
                         taskService.updateTaskStatus(taskId, TaskStatus.SCHEDULED)
                 }
             }
-            else {
-                println("Task $taskId is already running")
-            }
         }
     }
 }
@@ -67,22 +66,36 @@ class TaskJob: Job {
 class TaskScheduler (private val taskService: TaskService) {
     private val scheduler: Scheduler = StdSchedulerFactory.getDefaultScheduler()
     private val scope = CoroutineScope(Dispatchers.IO)
+    private var pollingJob: kotlinx.coroutines.Job? = null
 
     fun start() {
         println("Starting scheduler...")
         scheduler.context.put("taskService", taskService)
         scheduler.start()
-        loadExistingTasks()
+        startPolling()
+    }
+
+    private fun startPolling() {
+        pollingJob = scope.launch {
+            while (isActive) {
+                loadAndScheduleTasks()
+                delay(TimeUnit.MINUTES.toMillis(1)) // Poll every minute
+            }
+        }
     }
 
     fun shutdown() {
+        pollingJob?.cancel()
         scheduler.shutdown()
     }
-    private fun loadExistingTasks() {
-        println("Loading existing tasks...")
-        val tasks = runBlocking { taskService.getTasks(status=TaskStatus.SCHEDULED) }
-        println("Found ${tasks.size} tasks")
-        tasks.forEach { scheduleTask(it) }
+
+    private suspend fun loadAndScheduleTasks() {
+        val tasks = taskService.getTasks(TaskStatus.SCHEDULED)
+        if (tasks.isEmpty()) {
+            println("No scheduled tasks found. Will check again in 1 minute.")
+        } else {
+            tasks.forEach { scheduleTask(it) }
+        }
     }
 
     fun scheduleTask(task: Task) {

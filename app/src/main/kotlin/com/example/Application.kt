@@ -3,10 +3,7 @@ package com.example
 import com.example.controller.tasks
 import com.example.service.TaskService
 import com.google.auth.oauth2.GoogleCredentials
-import com.google.cloud.spanner.DatabaseClient
-import com.google.cloud.spanner.DatabaseId
-import com.google.cloud.spanner.Spanner
-import com.google.cloud.spanner.SpannerOptions
+import com.google.cloud.spanner.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*

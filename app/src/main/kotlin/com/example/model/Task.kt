@@ -48,18 +48,7 @@ object JacksonUtils {
 
 enum class TaskStatus(val value: String) {
     SCHEDULED("SCHEDULED"),
-    ON("ON"),
     RUNNING("RUNNING"),
-    FAILED("FAILED"),
-    ERROR("ERROR"),
-    PAUSED("PAUSED"),
-    SUSPENDED("SUSPENDED"),
-    CANCELLED("CANCELLED"),
-    COMPLETED("COMPLETED"),
-    BLOCKED("BLOCKED"),
-    WAITING("WAITING"),
-    EXPIRED("EXPIRED"),
-    QUEUED("QUEUED"),
     DISABLED("DISABLED");
 
     companion object {

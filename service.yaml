@@ -11,7 +11,7 @@ spec:
     spec:
       serviceAccountName: task-scheduler-dev@numeric-pilot-432704-n6.iam.gserviceaccount.com    
       containers:
-      - image: gcr.io/numeric-pilot-432704-n6/task-scheduler:v1
+      - image: gcr.io/numeric-pilot-432704-n6/task-scheduler:v4
         env:
         - name: SPANNER_PROJECT
           value: "numeric-pilot-432704-n6"

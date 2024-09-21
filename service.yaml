@@ -8,8 +8,9 @@ spec:
       annotations:
         autoscaling.knative.dev/maxScale: "100"
         run.googleapis.com/cloudsql-instances: "numeric-pilot-432704-n6:us-central1:task-scheduler"
+        run.googleapis.com/ingress: all
     spec:
-      serviceAccountName: task-scheduler-dev@numeric-pilot-432704-n6.iam.gserviceaccount.com    
+      serviceAccountName: task-scheduler-dev@numeric-pilot-432704-n6.iam.gserviceaccount.com
       containers:
       - image: gcr.io/numeric-pilot-432704-n6/task-scheduler:v4
         env:

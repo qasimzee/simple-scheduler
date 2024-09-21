@@ -116,7 +116,7 @@ class TaskService(private val dbClient: DatabaseClient) {
     suspend fun getTasks(status: TaskStatus? = null): List<Task> {
         return withContext(Dispatchers.IO) {
             val query = when (status) {
-                null -> Statement.of("SELECT * FROM tasks")
+                null -> Statement.of("SELECT * FROM task")
                 else -> Statement.newBuilder("SELECT * FROM task WHERE status = @status")
                     .bind("status").to(status.name)
                     .build()

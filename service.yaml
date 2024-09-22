@@ -12,7 +12,7 @@ spec:
     spec:
       serviceAccountName: task-scheduler-dev@numeric-pilot-432704-n6.iam.gserviceaccount.com
       containers:
-      - image: gcr.io/numeric-pilot-432704-n6/task-scheduler:v4
+      - image: gcr.io/numeric-pilot-432704-n6/task-scheduler-api:v1
         env:
         - name: SPANNER_PROJECT
           value: "numeric-pilot-432704-n6"
@@ -22,7 +22,7 @@ spec:
           value: "task-scheduler"
         resources:
           limits:
-            cpu: "1"
+            cpu: "2"
             memory: 512Mi
         startupProbe:
           httpGet:

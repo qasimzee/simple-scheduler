@@ -22,14 +22,19 @@ class TaskJob: Job {
         val taskId = context.jobDetail.jobDataMap.getString("taskId")
         val taskService = context.scheduler.context.get("taskService") as TaskService
         val scope = CoroutineScope(Dispatchers.Default)
-        scope.launch {
+        runBlocking {
             if (taskService.setTaskRunning(taskId)) {
                 var jobRun: JobRun? = null
                 try{
                     val task = taskService.getTask(taskId)
                     if (task != null) {
+                        // Should be locked to prevent duplicate runs
                         jobRun = taskService.createJobRun(taskId)
+                    
                         println("Executing task: ${task.task_name}")
+                        // More Execution code here
+                        // Just a random delay to simulate task execution time
+                        delay((100..10000).random().toLong())
 
                         jobRun = jobRun.copy(
                             end_time = Timestamp.now(),
@@ -37,25 +42,27 @@ class TaskJob: Job {
                         )
                         taskService.updateJobRun(jobRun)
                         taskService.updateTaskStatus(taskId, TaskStatus.SCHEDULED)
-                        println("Task $taskId completed with JobId: ${jobRun?.run_id}")
+                        val threadId = Thread.currentThread().getId();
+                        println("Task $taskId completed with JobId: ${jobRun?.run_id} by thread $threadId")
+                    
                     }
                     
                 }
                 catch (e: Exception) {
                     println("Error executing task $taskId: ${e.message}")
                         
-                        // Update job run status
-                        if (jobRun != null) {
-                            jobRun = jobRun.copy(
-                                end_time = Timestamp.now(),
-                                status = JobStatus.FAILED,
-                                error_message = e.message
-                            )
-                            taskService.updateJobRun(jobRun)
-                        }
+                    // Update job run status
+                    if (jobRun != null) {
+                        jobRun = jobRun.copy(
+                            end_time = Timestamp.now(),
+                            status = JobStatus.FAILED,
+                            error_message = e.message
+                        )
+                        taskService.updateJobRun(jobRun)
+                    }
 
-                        // Set task back to SCHEDULED
-                        taskService.updateTaskStatus(taskId, TaskStatus.SCHEDULED)
+                    // Set task back to SCHEDULED
+                    taskService.updateTaskStatus(taskId, TaskStatus.SCHEDULED)
                 }
             }
         }

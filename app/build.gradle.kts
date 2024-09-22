@@ -53,10 +53,12 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     }
 }
 
+//This is the main Rest API
 application {
     mainClass.set("com.example.ApplicationKt")
 }
 
+//This is a job
 tasks.create("runScheduler", JavaExec::class) {
     group = "application"
     mainClass.set("com.example.scheduler.TaskSchedulerKt")

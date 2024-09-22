@@ -1,0 +1,4 @@
+FROM openjdk:21-slim
+WORKDIR /app
+COPY /app/build/libs/app.jar tasks-scheduler-job.jar
+ENTRYPOINT ["java", "-cp", "tasks-scheduler-job.jar", "com.example.scheduler.TaskSchedulerKt"]

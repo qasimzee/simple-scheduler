@@ -1,0 +1,23 @@
+apiVersion: run.googleapis.com/v1
+kind: Job
+metadata:
+  name: task-scheduler-job
+spec:
+  template:
+    spec:
+      template:
+        spec:
+          containers:
+            - image: gcr.io/numeric-pilot-432704-n6/task-scheduler-job:v1
+              resources:
+                limits:
+                  cpu: "1"
+                  memory: "512Mi"
+              env:
+                - name: SPANNER_PROJECT
+                  value: "numeric-pilot-432704-n6"
+                - name: SPANNER_INSTANCE
+                  value: "task-management"
+                - name: SPANNER_DATABASE
+                  value: "task-scheduler"
+          serviceAccountName: task-scheduler-dev@numeric-pilot-432704-n6.iam.gserviceaccount.com

@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import java.util.Properties
 
 
 class TaskJob: Job {
@@ -71,7 +72,10 @@ class TaskJob: Job {
 
 
 class TaskScheduler (private val taskService: TaskService) {
-    private val scheduler: Scheduler = StdSchedulerFactory.getDefaultScheduler()
+    val props = Properties().apply {
+        setProperty("org.quartz.threadPool.threadCount", "100")
+    }
+    private val scheduler: Scheduler = StdSchedulerFactory(props).scheduler
     private val scope = CoroutineScope(Dispatchers.IO)
     private var pollingJob: kotlinx.coroutines.Job? = null
 

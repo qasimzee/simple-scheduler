@@ -49,11 +49,22 @@ fun Application.module() {
 
     val taskService = TaskService(databaseClient)
 
+    configureRouting(taskService)
+
+}
+
+fun Application.configureRouting(taskService: TaskService) {
     routing {
         get("/health") {
             call.respondText("OK", status = HttpStatusCode.OK)
         }
         tasks(taskService)
     }
+}
 
+fun Application.testModule(taskService: TaskService) {
+    install(ContentNegotiation) {
+        jackson()
+    }
+    configureRouting(taskService)
 }

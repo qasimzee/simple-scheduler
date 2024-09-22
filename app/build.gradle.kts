@@ -5,6 +5,9 @@
  * For more details on building Java & JVM projects, please refer to https://docs.gradle.org/8.10.1/userguide/building_java_projects.html in the Gradle documentation.
  */
 
+ val ktorVersion = "2.3.7"
+
+
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
@@ -25,20 +28,25 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
-    implementation("io.ktor:ktor-server-core:2.3.12")
-    implementation("io.ktor:ktor-server-netty:2.3.12")
-    implementation("io.ktor:ktor-server-content-negotiation:2.3.12")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.12")
-    implementation("io.ktor:ktor-server-call-logging:2.3.12")
+    implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
+    implementation("io.ktor:ktor-serialization:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
     implementation("org.quartz-scheduler:quartz:2.3.2")
     implementation("com.google.cloud:google-cloud-spanner:6.74.0")
-    implementation("io.ktor:ktor-serialization:2.3.12")
-    implementation("io.ktor:ktor-serialization-jackson:2.3.12")
     implementation("org.apache.logging.log4j:log4j-core:2.14.1")
 
     implementation("org.slf4j:slf4j-api:2.0.16")
     implementation("org.slf4j:slf4j-simple:2.0.16")
     implementation("ch.qos.logback:logback-classic:1.3.6")
+
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("io.mockk:mockk:1.12.0")
+    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
 }
 
 kotlin {

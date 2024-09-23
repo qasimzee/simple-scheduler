@@ -16,6 +16,12 @@ fun Route.tasks(taskService: TaskService) {
         call.respond(tasks)
     }
 
+    post("/tasks") {
+        val task = call.receive<Task>()
+        taskService.createTask(task)
+        call.respond(HttpStatusCode.Created)
+    }
+
     get("/") {
         call.respond("Welcome to the Task scheduler")
     }

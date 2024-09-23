@@ -6,7 +6,8 @@
  */
 
  val ktorVersion = "2.3.7"
-
+ val jupiterVersion = "5.8.1"
+val jetbrainsVersion = "1.3.0"
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
@@ -37,8 +38,8 @@ dependencies {
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
     implementation("org.quartz-scheduler:quartz:2.3.2")
     implementation("com.google.cloud:google-cloud-spanner:6.74.0")
+    
     implementation("org.apache.logging.log4j:log4j-core:2.14.1")
-
     implementation("org.slf4j:slf4j-api:2.0.16")
     implementation("org.slf4j:slf4j-simple:2.0.16")
     implementation("ch.qos.logback:logback-classic:1.3.6")
@@ -46,7 +47,11 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("io.mockk:mockk:1.12.0")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$jetbrainsVersion")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$jupiterVersion") 
+    testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$jetbrainsVersion")
 }
 
 kotlin {

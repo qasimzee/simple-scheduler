@@ -45,7 +45,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.3.6")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testImplementation("io.mockk:mockk:1.12.0")
+    testImplementation("io.mockk:mockk:1.13.4")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$jetbrainsVersion")
 

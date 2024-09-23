@@ -31,7 +31,6 @@ fun createMockTasks(): List<Task> {
             next_execution_time = Timestamp.ofTimeSecondsAndNanos(now.plusSeconds(7 * 24 * 60 * 60).epochSecond, 0),  // 7 days from now
             status = TaskStatus.SCHEDULED
         )
-        // Add more mock tasks as needed
     )
     return tasks
 }

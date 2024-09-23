@@ -88,6 +88,7 @@ class TaskScheduler (private val taskService: TaskService) {
 
     private fun startPolling() {
         pollingJob = scope.launch {
+            println("Starting polling job...")
             while (isActive) {
                 loadAndScheduleTasks()
                 delay(TimeUnit.MINUTES.toMillis(1)) // Poll every minute
